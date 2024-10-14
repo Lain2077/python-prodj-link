@@ -137,14 +137,18 @@ class ClientList:
 
   # update all known player information
   def eatStatus(self, status_packet):
+    logging.debug("Received packet: %s from player %d", status_packet, status_packet.player_number)
     if status_packet.type not in ["cdj", "djm", "link_reply"]:
-      logging.info("Received %s status packet from player %d, ignoring", status_packet.type, status_packet.player_number)
-      return
+        logging.info("Ignoring packet type %s from player %d", status_packet.type, status_packet.player_number)
+        return
     c = self.getClient(status_packet.player_number)
-    if c is None: # packet from unknown client
-      return
+    if c is None:
+        logging.warning("Received packet from unknown client %d", status_packet.player_number)
+        return
     client_changed = False
     c.status_packet_received = True
+    # Additional logic here
+
 
     if status_packet.type == "link_reply":
       link_info = { key: status_packet.content[key] for key in ["name", "track_count", "playlist_count", "bytes_total", "bytes_free", "date"] }
@@ -311,7 +315,7 @@ class Client:
     now = time.time()
     self.position += pitch*(now-self.position_timestamp)
     self.position_timestamp = now
-    #logging.debug("Track position inc %f actual_pitch %.6f play_state %s beat %d", self.position, self.actual_pitch, self.play_state, self.beat_count)
+    logging.debug("Track position inc %f actual_pitch %.6f play_state %s beat %d", self.position, self.actual_pitch, self.play_state, self.beat_count)
     return self.position
 
   def updateTtl(self):
