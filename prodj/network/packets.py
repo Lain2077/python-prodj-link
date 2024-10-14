@@ -13,8 +13,8 @@ IpAddr = IpAddrAdapter(Byte[4])
 
 class MacAddrAdapter(Adapter):
   def _encode(self, obj, context, path):
-    #obj = obj.replace("-", ":")
-    return list(int(x,16) for x in obj.split("-"))
+    obj = obj.replace("-", ":")
+    return list(int(x,16) for x in obj.split(":"))
   def _decode(self, obj, context, path):
     return ":".join("{:02x}".format(x) for x in obj)
 MacAddr = MacAddrAdapter(Byte[6])

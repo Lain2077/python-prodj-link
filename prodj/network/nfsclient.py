@@ -68,7 +68,7 @@ class NfsClient:
     self.receiver.recv_size = chunk_size + 160
 
   async def RpcCall(self, host, prog, vers, proc, data):
-    # logging.debug("RpcCall ip %s prog \"%s\" proc \"%s\"", host, prog, proc)
+    logging.debug("RpcCall ip %s prog \"%s\" proc \"%s\"", host, prog, proc)
     rpccall = {
       "xid": self.getXid(),
       "type": "call",
